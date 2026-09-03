@@ -1,0 +1,14 @@
+# athena-user 9 PS7573.6536N 0036072687616 amz-p,release-keys
+- manufacturer: amazon
+- platform: mt8183
+- codename: athena
+- flavor: athena-user
+- release: 9
+- id: PS7573.6536N
+- incremental: 0036072687748
+- tags: amz-p,release-keys
+- fingerprint: Amazon/athena/athena:9/PS7573.6536N/0036072687616:user/amz-p,release-keys
+- is_ab: false
+- brand: Amazon
+- branch: athena-user-9-PS7573.6536N-0036072687616-amz-p,release-keys
+- repo: amazon_athena_dump
