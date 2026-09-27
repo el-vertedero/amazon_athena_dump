@@ -1,0 +1,65 @@
+#
+# Copyright (c) 2024 Amazon.com, Inc. or its affiliates.  All rights reserved.
+# PROPRIETARY/CONFIDENTIAL.  USE IS SUBJECT TO LICENSE TERMS.
+#
+
+on early-boot
+    mkdir /dev/cpuset/bigcpus
+    chmod 0777 /dev/cpuset/bigcpus
+    chmod 0777 /dev/cpuset/bigcpus/tasks
+    write /dev/cpuset/bigcpus/mems 0
+    write /dev/cpuset/bigcpus/cpus 4-7
+
+on boot
+    #Set usb pid for Athena(0x01Cx)
+    setprop ro.vendor.usb.pid.mtp 0x01C1
+    setprop ro.vendor.usb.pid.mtp.adb 0x01C2
+    setprop ro.vendor.usb.pid.ptp 0x01C3
+    setprop ro.vendor.usb.pid.ptp.adb 0x01C4
+    setprop ro.vendor.usb.pid.adb 0x01C8
+
+on early-fs
+   write /sys/block/zram0/comp_algorithm zstd
+
+on post-fs
+   #Configuring pins for mute led brightness
+   write /sys/class/pwm/pwmchip0/export 0
+   write /sys/class/pwm/pwmchip0/pwm0/period 255
+   write /sys/class/pwm/pwmchip0/pwm0/duty_cycle 255
+   write /sys/class/pwm/pwmchip0/pwm0/enable 1
+
+   # start dbus for bluetooth and avahi
+   start dbus
+   start avahi-daemon
+
+service disable_fr /vendor/bin/a4b_factory_reset.sh Disable
+    class core
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:a4b_factory_reset:s0
+
+service enable_fr /vendor/bin/a4b_factory_reset.sh Enable
+    class core
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:a4b_factory_reset:s0
+
+on property:persist.vendor.a4b_fr_disable=1
+    start disable_fr
+
+on property:persist.vendor.a4b_fr_disable=0
+    start enable_fr
+
+service dbus /system/bin/dbus-daemon --system --nofork
+    class main
+    socket dbus stream 660 dbus dbus
+    user dbus
+    group dbus
+
+service avahi-daemon /system/bin/avahi-daemon --no-drop-root
+    user root
+    group dbus
