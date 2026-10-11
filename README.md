@@ -1,0 +1,14 @@
+# athena-user 9 PS75741.7080N 0036274153472 amz-p,release-keys
+- manufacturer: amazon
+- platform: mt8183
+- codename: athena
+- flavor: athena-user
+- release: 9
+- id: PS75741.7080N
+- incremental: 0036274153604
+- tags: amz-p,release-keys
+- fingerprint: Amazon/athena/athena:9/PS75741.7080N/0036274153472:user/amz-p,release-keys
+- is_ab: false
+- brand: Amazon
+- branch: athena-user-9-PS75741.7080N-0036274153472-amz-p,release-keys
+- repo: amazon_athena_dump
